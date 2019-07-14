@@ -1,0 +1,7 @@
+*.npz
+*.png
+FFNN.ipynb
+*.pyc
+*.nbi
+__pycache__/
+.*/
