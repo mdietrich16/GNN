@@ -147,6 +147,15 @@ def quadratic_cost_prime(o, y):
     return o - one_hot_encoding(y, 10)
 
 
+def find_factors(n):
+    n = int(n)
+    f = []
+    for i in range(1, int(np.sqrt(n))):
+        if n % i == 0:
+            f.append((i, n//i))
+    return f
+
+
 def cov(data):
     mean = np.mean(data, axis=0, keepdims=True)
     return data.T.dot(data)/(data.shape[0]-1) - mean.T.dot(mean)
