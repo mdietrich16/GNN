@@ -396,7 +396,6 @@ class Trainer:
         responsive = kwds.get('responsive', False)
         recurrent = gek == Trainer.recurrent_gek
         seq_len = kwds.get('seq_len', 32)
-        print(recurrent)
         if recurrent:
             batch_size = seq_len*batch_size
 
@@ -621,7 +620,7 @@ class Trainer:
                             gs += g
         return loss/seq_len, dparams
 
-    def sample(self, net, seed, vocab, samples=100, seedlen=np.inf, test=True):
+    def sample(self, net, seed, vocab, samples=100, seedlen=np.inf, **kwargs):
         reset = True
 
         if not isinstance(seed, np.ndarray):
@@ -635,13 +634,13 @@ class Trainer:
         for i in range(min(len(seed), seedlen)):
             x = data[0][0][i:i+1]
             print(vocab[0, np.argmax(x, axis=1)].squeeze(), end='')
-            p, c = net.feedforward(x, reset=reset, test=test)
+            p, c = net.feedforward(x, reset=reset, **kwargs)
             reset = False
         o = np.random.choice(p.size, p=p.ravel())
         x = one_hot_encoding([o], p.size)
         print(vocab[0, o].squeeze(), end='')
         for i in range(samples):
-            p, c = net.feedforward(x, test=test)
+            p, c = net.feedforward(x, **kwargs)
             o = np.random.choice(p.size, p=p.ravel())
             x = one_hot_encoding([o], p.size)
             print(vocab[0, o].squeeze(), end='')

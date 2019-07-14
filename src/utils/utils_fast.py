@@ -127,7 +127,7 @@ def cross_entropy(o, y):
 
 
 @njit(parallel=True, fastmath=True)
-def cross_entropy_prime(o, y):
+def cross_entropy_prime(o, y, alpha=1.):
     dCdo = o.copy()
     m, _, n, o = o.shape
     for i in prange(m):
@@ -135,6 +135,7 @@ def cross_entropy_prime(o, y):
             for k in prange(o):
                 p = y[i]
                 dCdo[i, p, j, k] -= 1.
+                dCdo *= alpha
     return dCdo
 
 

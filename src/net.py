@@ -189,13 +189,13 @@ class GNN:
 
     @staticmethod
     def __softmax(x, params, **kwargs):
-        o = softmax(x)
+        o = softmax(x, alpha=kwargs.get('alpha', 1.))
         return o, (o,)
 
     @staticmethod
     def __softmax_back(dout, cache, params, **kwargs):
         # dout is the labels in this layer, not the gradient!!!!!
-        dx = lossp(cache[0], dout)
+        dx = lossp(cache[0], dout, alpha=kwargs.get('alpha', 1.))
         return dx, ()
 
     def __init__(self,
