@@ -135,7 +135,7 @@ def cross_entropy_prime(o, y, alpha=1.):
             for k in prange(o):
                 p = y[i]
                 dCdo[i, p, j, k] -= 1.
-                dCdo *= alpha
+    dCdo *= alpha
     return dCdo
 
 
