@@ -441,19 +441,23 @@ class Trainer:
             perf[0] = np.array([tacc, tcost, acc, cost])
         running_loss = np.log(data[0][0].shape[0])
         if responsive:
-            print('Press <p> + <Enter> for pause and <c> + <Enter> for abort.')
-            import threading
-            import queue
-            q = queue.SimpleQueue()
+            print('Press <p> for pause and <c> or <q> for abort.')
+            import keyboard
+            paused = []
+            abort = []
 
-            def handle_input(q):
-                s = ''
-                while 'c' not in s:
-                    s = input()
-                    q.put(s)
+            def toggle_paused(paused):
+                if paused:
+                    paused[:] = []
+                else:
+                    paused.append(True)
 
-            thread = threading.Thread(target=handle_input, args=[q])
-            thread.start()
+            def trigger_abort(abort):
+                abort.append(True)
+
+            keyboard.add_hotkey('p', toggle_paused, args=[paused])
+            keyboard.add_hotkey('c', trigger_abort, args=[abort])
+            keyboard.add_hotkey('q', trigger_abort, args=[abort])
 
         n = 0
         ts = time.time()
@@ -504,26 +508,21 @@ class Trainer:
                                        recurrent=recurrent))
                     perf[n // plot_every] = \
                         np.array([tacc, tcost, acc, cost])
-                if responsive and not q.empty():
-                    s = q.get_nowait()
-                    if 'p' in s:
-                        print('\bPaused...' + ' '*50, end='\r')
-                        s = s.replace('p', '')
-                        while True:
-                            if not q.empty():
-                                s += q.get_nowait()
-                                if 'p' in s or 'c' in s:
-                                    s = s.replace('p', '')
-                                    break
+                if responsive:
+                    if paused:
+                        print('\bPaused...' + ' '*80, end='\r')
+                        while paused:
                             time.sleep(0.5)
 
-                    if 'c' in s:
-                        print('\rAborted training loop...' + ' '*50, end='\r')
-                        s = s.replace('c', '')
+                    if abort:
+                        print('\bAborted training loop...' + ' '*80, end='\r')
                         break
             else:
                 continue
             break
+
+        if responsive:
+            keyboard.unhook_all_hotkeys()
 
         h = int(cumtime // 3600)
         m = int(cumtime % 3600//60)
