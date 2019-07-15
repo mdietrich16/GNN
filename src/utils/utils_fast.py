@@ -150,7 +150,7 @@ def quadratic_cost_prime(o, y):
 def find_factors(n):
     n = int(n)
     f = []
-    for i in range(1, int(np.sqrt(n))):
+    for i in range(1, int(np.sqrt(n))+1):
         if n % i == 0:
             f.append((i, n//i))
     return f
