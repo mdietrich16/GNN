@@ -11,9 +11,9 @@ import time
 import numpy as np
 import re
 
-from utils.utils import progress, cross_entropy
-from utils.data_utils import shuffle_data, gen_mini_batches
-from utils.data_utils import one_hot_encoding, make_data
+from gnn.utils.utils import progress, cross_entropy
+from gnn.utils.data_utils import shuffle_data, gen_mini_batches
+from gnn.utils.data_utils import one_hot_encoding, make_data
 
 
 def SGD(params, dparams, hp=(0.01,), cache=()):

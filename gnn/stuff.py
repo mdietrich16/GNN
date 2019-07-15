@@ -6,7 +6,7 @@ from glumpy.geometry import primitives
 from glumpy.graphics.collections import GlyphCollection
 from glumpy.graphics.text import FontManager
 
-from trainer import SGD, NAdam, Adam, Momentum, RMSProp, AdaMax, AdaGrad
+from gnn.trainer import SGD, NAdam, Adam, Momentum, RMSProp, AdaMax, AdaGrad
 
 window = app.Window(800, 600, color=(.2,.2,.35,1))
 

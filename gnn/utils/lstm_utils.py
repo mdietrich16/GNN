@@ -6,9 +6,9 @@ Created on Fri Jun 28 20:02:11 2019
 """
 
 import numpy as np
-from utils.utils import sigmoid
-from utils.utils import sigmoid_prime, tanh_prime, softmax
-from utils.utils import cross_entropy, cross_entropy_prime as lossp
+from gnn.utils.utils import sigmoid
+from gnn.utils.utils import sigmoid_prime, tanh_prime, softmax
+from gnn.utils.utils import cross_entropy, cross_entropy_prime as lossp
 
 
 def LSTM(x, w, b, h0, c0):

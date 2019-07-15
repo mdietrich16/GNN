@@ -8,6 +8,7 @@ Created on Wed May 22 15:45:32 2019
 import numpy as np
 from numba import njit, prange
 
+
 def progress(p, cost=None, tr=None):
     s = ('\r{:5.2f}% |'.format(p*100.) + int(np.ceil(p*25))*'#' +
          int(np.floor((1.-p)*25 + 1e-5))*' ' + '|')
@@ -19,6 +20,7 @@ def progress(p, cost=None, tr=None):
         sec = int(tr % 60)
         s += '\tRemaining time: {:2d}h{:2d}m{:2d}s'.format(h, m, sec)
     print(s, end='\r')
+
 
 def make_rgb(string, r, g, b, background=False):
     if isinstance(r, float) or isinstance(g, float) or isinstance(b, float):

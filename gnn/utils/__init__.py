@@ -1,5 +1,5 @@
-import utils.utils_fast
-import utils.utils_slow
+import gnn.utils.utils_fast
+import gnn.utils.utils_slow
 import sys
-sys.modules['utils.utils'] = sys.modules['utils.utils_fast']
-# sys.modules['utils.utils'] = sys.modules['utils.utils_slow']
+#sys.modules['gnn.utils.utils'] = sys.modules['gnn.utils.utils_fast']
+sys.modules['gnn.utils.utils'] = sys.modules['gnn.utils.utils_slow']

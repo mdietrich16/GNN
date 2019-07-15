@@ -6,7 +6,7 @@ Created on Wed May 22 15:45:32 2019
 """
 
 import numpy as np
-from numba import njit
+
 
 def progress(p, cost=None, tr=None):
     s = ('\r{:5.2f}% |'.format(p*100.) + int(np.ceil(p*25))*'#' +
@@ -19,6 +19,7 @@ def progress(p, cost=None, tr=None):
         sec = int(tr % 60)
         s += '\tRemaining time: {:2d}h{:2d}m{:2d}s'.format(h, m, sec)
     print(s, end='\r')
+
 
 def make_rgb(string, r, g, b, background=False):
     if isinstance(r, float) or isinstance(g, float) or isinstance(b, float):
@@ -97,7 +98,7 @@ def cross_entropy(o, y):
     return -np.log(o[np.arange(o.shape[0]), y])
 
 
-def cross_entropy_prime(o, y):
+def cross_entropy_prime(o, y, alpha=1.):
     dCdo = o.copy()
     m, _, n, o = o.shape
     i, j, k = np.arange(m), np.arange(n), np.arange(o)
@@ -112,6 +113,15 @@ def quadratic_cost(o, y):
 
 def quadratic_cost_prime(o, y):
     return o - one_hot_encoding(y, 10)
+
+
+def find_factors(n):
+    n = int(n)
+    f = []
+    for i in range(1, int(np.sqrt(n))+1):
+        if n % i == 0:
+            f.append((i, n//i))
+    return f
 
 
 def cov(data):

@@ -9,7 +9,7 @@ Created on Wed May 22 15:50:38 2019
 import pickle
 import numpy as np
 
-from utils.utils import one_hot_encoding
+from gnn.utils.utils import one_hot_encoding
 
 
 def shuffle_data(data, volumetric=True):

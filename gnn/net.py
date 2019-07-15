@@ -7,13 +7,13 @@ Created on Wed May 22 14:43:32 2019
 """
 
 import numpy as np
-from utils.cnn_utils import conv, pool, pool_back
-from utils.cnn_utils import conv_back_im2col as conv_back
-from utils.lstm_utils import LSTM, LSTM_back
-from utils.utils import cross_entropy as loss
-from utils.utils import cross_entropy_prime as lossp
-from utils.utils import softmax, dropout_prime, RELU
-from utils.utils import RELU_prime, ELU, ELU_prime, dropout
+from gnn.utils.cnn_utils import conv, pool, pool_back
+from gnn.utils.cnn_utils import conv_back_im2col as conv_back
+from gnn.utils.lstm_utils import LSTM, LSTM_back
+from gnn.utils.utils import cross_entropy as loss
+from gnn.utils.utils import cross_entropy_prime as lossp
+from gnn.utils.utils import softmax, dropout_prime, RELU
+from gnn.utils.utils import RELU_prime, ELU, ELU_prime, dropout
 
 
 class GNN:
