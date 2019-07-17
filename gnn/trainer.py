@@ -401,10 +401,12 @@ class Trainer:
 
         train_data, test_data = data
         if isinstance(epochs, float) and epochs < 1.:
-            train_data[0] = train_data[0][:int(np.round(epochs *
-                                                        len(train_data[0])))]
-            train_data[1] = train_data[1][:int(np.round(epochs *
-                                                        len(train_data[1])))]
+            train_data_ = []
+            train_data_.append(train_data[0][:int(np.round(epochs *
+                               len(train_data[0])))])
+            train_data_.append(train_data[1][:int(np.round(epochs *
+                               len(train_data[1])))])
+            train_data = train_data_
             """
             test_data[0] = test_data[0][:int(np.round(epochs
                                         * len(test_data[0])))]
@@ -527,7 +529,7 @@ class Trainer:
         h = int(cumtime // 3600)
         m = int(cumtime % 3600//60)
         sec = int(cumtime % 60)
-        print('\nIt took friggin\' {:2d}h{:2d}m{:2d}s'.format(h, m, sec))
+        print('\nTraining took \' {:2d}h{:2d}m{:2d}s'.format(h, m, sec))
 
         if plotting:
             print('Now plotting graphs...')
@@ -596,6 +598,7 @@ class Trainer:
         zs = []
         loss = 0.
         reset = True
+        seq_len = np.minimum(seq_len, y.size)
         for k in range(seq_len):
             o, c = net.feedforward(x[k::seq_len],
                                    test=False,
@@ -752,11 +755,15 @@ class Trainer:
         cost = 0.
         train_data, test_data = data
         if accuracy_on_test or cost_on_test:
-            if not recurrent:
+            _samples = np.minimum(test_data[1].shape[0], samples)
+            if recurrent:
+                i = (0 if _samples >= test_data[1].shape[0]
+                     else np.random.randint(test_data[1].size-_samples))
+            else:
+                i = 0
                 shuffle_data(test_data)
-            x = test_data[0][:samples]
-            y = test_data[1][:samples]
-            _samples = y.shape[0]
+            x = test_data[0][i:i+samples]
+            y = test_data[1][i:i+samples]
             if recurrent:
                 seq_len = np.maximum(_samples//16, _samples//(_samples//8))
                 out = None
@@ -779,8 +786,12 @@ class Trainer:
 
         if accuracy_on_training or cost_on_training:
             _samples = np.minimum(train_data[1].shape[0], samples)
-            i = (0 if _samples == train_data[1].shape[0]
-                 else np.random.randint(train_data[1].size-_samples))
+            if recurrent:
+                i = (0 if _samples >= train_data[1].shape[0]
+                     else np.random.randint(train_data[1].size-_samples))
+            else:
+                i = 0
+                shuffle_data(train_data)
             x = train_data[0][i:i+_samples]
             y = train_data[1][i:i+_samples]
             if recurrent:

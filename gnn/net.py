@@ -361,6 +361,7 @@ class GNN:
             `batch size`)
         **kwargs
             Additional arguments given to the layer functions.
+
             test : boolean
                 Switches to different implementations in some layers for
                 test-time and deployment, that may be faster or introduce
