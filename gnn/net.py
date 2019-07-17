@@ -258,28 +258,33 @@ class GNN:
 
         for l in layers:
             if len(l) > 1 and isinstance(l[1], np.ndarray):
-                self.layers = layers
+                # self.layers = layers
                 for i, lay in enumerate(layers):
                     if lay[0] in ('RELU', 'ELU', 'softmax', 'dropout'):
                         self.shapes.append(self.shapes[i])
+                        self.layers.append(tuple(lay))
                     elif lay[0] == 'pool':
                         self.shapes.append((1, self.shapes[i][1],
                                             self.shapes[i][2]//lay[1],
                                             self.shapes[i][3]//lay[2]))
+                        self.layers.append(tuple(lay))
                     elif lay[0] == 'fc':
                         self.shapes.append((1, lay[1].shape[0], 1, 1))
                         self.num_params += (np.prod(lay[1].shape) +
                                             lay[2].shape[0])
+                        self.layers.append(tuple(lay))
                     elif lay[0] == 'LSTM':
                         outs = lay[1].shape[1]//4
                         self.shapes.append((1, outs, 1, 1))
                         self.num_params += (np.prod(lay[1].shape) +
-                                            lay[2].shape[0])
+                                            lay[2].shape[1])
+                        self.layers.append(np.array(lay))
                     elif lay[0] == 'conv':
                         self.shapes.append((1, lay[1].shape[0],
                                             *self.shapes[i][2:]))
                         self.num_params += (np.prod(lay[1].shape) +
                                             lay[2].shape[0])
+                        self.layers.append(tuple(lay))
                 break
 
         if not self.layers:
