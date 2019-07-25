@@ -95,7 +95,7 @@ def softmax_prime(o):
 
 
 def cross_entropy(o, y):
-    return -np.log(o[np.arange(o.shape[0]), y])
+    return -np.log(o[np.arange(o.shape[0]), y] + 1e-16)
 
 
 def cross_entropy_prime(o, y, alpha=1.):
@@ -122,6 +122,31 @@ def find_factors(n):
         if n % i == 0:
             f.append((i, n//i))
     return f
+
+
+def visualize_kernels(img=None, kernels=None, activations=None):
+    import matplotlib.pyplot as plt
+    if img is not None:
+        fig = plt.figure(figsize=(8, 8))
+        plt.imshow(img.transpose(0, 2, 3, 1).squeeze(), cmap='gray')
+    if kernels is not None:
+        fig = plt.figure(figsize=(8, 8))
+        i = 1
+        fs = find_factors(kernels.shape[0])
+        h, w = fs[-1]
+        for k in kernels:
+            fig.add_subplot(8, 4, i)
+            plt.imshow(k.transpose(1, 2, 0).sum(axis=2), cmap='gray')
+            i += 1
+    if activations is not None:
+        fig = plt.figure(figsize=(8, 8))
+        i = 1
+        fs = find_factors(activations.shape[1])
+        h, w = fs[-1]
+        for k in activations[0]:
+            fig.add_subplot(h, w, i)
+            plt.imshow(k, cmap='gray')
+            i += 1
 
 
 def cov(data):

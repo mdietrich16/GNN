@@ -36,7 +36,8 @@ def shuffle_data(data, volumetric=True):
     return data
 
 
-def load_mnist(file='mnist.pkl', folder=None, volumetric=True):
+def load_mnist(file='mnist.pkl', folder=None,
+               shape=(1, 1, 28, 28), volumetric=True):
     r"""
     Load a pickled dataset with the same format as the MNIST dataset.
 
@@ -49,10 +50,14 @@ def load_mnist(file='mnist.pkl', folder=None, volumetric=True):
         Either a path string in which the `file` is to be found or None to
         enable automatic search. All subdirectories of ``...\GNN\`` are
         searched. The default is None for automatic search.
+    shape : tuple or int, optional
+        A tuple of the shape of the dataset in form (1, c, w, h). This only
+        encodes shape in this way with volumetric=True, otherwise this should
+        be an integer being the length of a datapoint. The default is true.
     volumetric : boolean, optional
         Wether the data is shaped `(n, c, w, h)` as in batched images.
-        If True, the data will have shape (n, 1, 28, 28) else (n, 784)
-        The default is True.
+        If True, the data will have shape (n, 1, 28, 28) by default
+        else (n, 784). The default is True.
 
     Raises
     ------
@@ -97,20 +102,20 @@ def load_mnist(file='mnist.pkl', folder=None, volumetric=True):
     with open(file, 'rb') as f:
         mnist = pickle.load(f, encoding='latin1')
     if volumetric:
-        inputs = (mnist['training_images'].reshape(-1, 1, 28, 28)
+        inputs = (mnist['training_images'].reshape(-1, *shape[1:])
                                           .astype(np.float32))
         labels = mnist['training_labels'].reshape(-1)
 
-        tinputs = (mnist['test_images'].reshape(-1, 1, 28, 28)
+        tinputs = (mnist['test_images'].reshape(-1, *shape[1:])
                                        .astype(np.float32))
         tlabels = mnist['test_labels'].reshape(-1)
 
     else:
-        inputs = np.moveaxis(mnist['training_images'].reshape(-1, 784)
+        inputs = np.moveaxis(mnist['training_images'].reshape(-1, shape)
                              .astype(np.float32), 0, -1)
         labels = mnist['training_labels'].reshape(-1)
 
-        tinputs = np.moveaxis(mnist['test_images'].reshape(-1, 784)
+        tinputs = np.moveaxis(mnist['test_images'].reshape(-1, shape)
                               .astype(np.float32), 0, -1)
         tlabels = mnist['test_labels'].reshape(-1)
 

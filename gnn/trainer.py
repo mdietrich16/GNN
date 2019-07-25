@@ -553,9 +553,20 @@ class Trainer:
             acc.legend()
             fig.show()
 
-        if save and ((isinstance(saveif, str) and eval(saveif))
-                     or saveif is None):
-            print('Now saving graphs and the network...')
+        if save and (responsive or ((isinstance(saveif, str) and eval(saveif))
+                     or saveif is None)):
+            if responsive:
+                key = ''
+                print('Do you want to save the network? (Y/N) >>>', end='')
+                while key not in ('n', 'y'):
+                    key = keyboard.read_key()
+                    if key == 'n':
+                        print(' No', end='\r')
+                        return losses, perf
+                    elif key == 'y':
+                        print('Yes', end='\r')
+                        break
+            print('Now saving graphs and the network...                      ')
             path, _, post = net.save(date=False, perf=perf, losses=losses)
             if plotting:
                 fig.savefig(path + 'perfplot_' + post + '.png')

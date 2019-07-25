@@ -5,3 +5,4 @@ FFNN.ipynb
 *.nbi
 __pycache__/
 .*/
+cifar-10-batches-py/
