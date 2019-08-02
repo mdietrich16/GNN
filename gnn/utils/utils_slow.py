@@ -135,7 +135,7 @@ def visualize_kernels(img=None, kernels=None, activations=None):
         fs = find_factors(kernels.shape[0])
         h, w = fs[-1]
         for k in kernels:
-            fig.add_subplot(8, 4, i)
+            fig.add_subplot(h, w, i)
             plt.imshow(k.transpose(1, 2, 0).sum(axis=2), cmap='gray')
             i += 1
     if activations is not None:
@@ -187,3 +187,40 @@ def eigen(x, m, number=1000, eta=1e-2):
         data = data - lmbda/norm(vec)*vec.dot(vec.T)
         eigen_pairs.append((lmbda, vec))
     return eigen_pairs
+
+
+def PCA(x, y=None, ndim=2, number=1000, eta=1e-2, plot=True):
+    if plot:
+        ndim = np.clip(ndim, 2, 3)
+    x_ = x.reshape(x.shape[0], -1)
+    x_ = np.nan_to_num((x_ - x_.mean(axis=0, keepdims=True))/x_.std(axis=0, keepdims=True))
+    covariance = cov(x.reshape(x.shape[0], -1))
+    eigens = eigen(covariance, ndim, number, eta)
+    transform = np.concatenate(tuple([eigen[1] for eigen in eigens]), axis=1)
+    x_ = x_.dot(transform)
+    if plot:
+        import matplotlib.pyplot as plt
+        if ndim == 2:
+            fig, ax = plt.subplots()
+        else:
+            from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
+            fig = plt.figure()
+            ax = fig.add_subplot(111, projection='3d')
+        cmap = plt.get_cmap('gist_rainbow')
+        size = 201.6546088 / np.sqrt(x.shape[0]) - 0.8518268264
+        if ndim == 2:
+            for i in range(10):
+                ax.scatter(x_[y == i, 0], x_[y == i, 1],
+                           c=[cmap(i/10)],
+                           s=size,
+                           label='Class {}'.format(i))
+        else:
+            for i in range(10):
+                ax.scatter(x_[y == i, 0], x_[y == i, 1], x_[y == i, 2],
+                           c=[cmap(i/10)],
+                           s=size,
+                           label='Class {}'.format(i))
+        lgnd = ax.legend()
+        for h in lgnd.legendHandles:
+            h._sizes = [30]
+    return transform, eigens
