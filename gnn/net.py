@@ -292,7 +292,10 @@ class GNN:
                 if layers[l][0] == 'conv':
                     w = (np.random.randn(layers[l][1], self.shapes[l][1],
                                          layers[l][2], layers[l][3])
-                         .astype(dtype),
+                         .astype(dtype)
+                         / np.sqrt(layers[l][1] *
+                                   layers[l][2] *
+                                   layers[l][3]),
                          np.zeros((layers[l][1], 1), dtype=dtype))
                     self.num_params += (np.prod(layers[l][1:]) *
                                         self.shapes[l][1]
@@ -355,7 +358,7 @@ class GNN:
                            'fc':        GNN.__fully_connected_back,
                            'softmax':   GNN.__softmax_back}
 
-    def feedforward(self, batch, **kwargs):
+    def feedforward(self, batch, intermediate=False, **kwargs):
         """
         Compute an  estimate given data.
 
@@ -364,6 +367,8 @@ class GNN:
         batch : ndarray of shape (n, c, h, w)
             Input data. Has to match the networks input shape(except n, the
             `batch size`)
+        intermediate : boolean
+            Whether to return just the output or all temporary outputs
         **kwargs
             Additional arguments given to the layer functions.
 
@@ -386,12 +391,22 @@ class GNN:
             backpropagation.
 
         """
-        z = np.ascontiguousarray(batch)
-        caches = []
-        for l in self.layers:
-            z, cache = self.funcs[l[0]](z, l[1:], **kwargs)
-            caches.append(cache)
-        return z, caches
+        if intermediate:
+            z = np.ascontiguousarray(batch)
+            zs = []
+            caches = []
+            for l in self.layers:
+                z, cache = self.funcs[l[0]](z, l[1:], **kwargs)
+                zs.append(z)
+                caches.append(cache)
+            return zs, caches
+        else:
+            z = np.ascontiguousarray(batch)
+            caches = []
+            for l in self.layers:
+                z, cache = self.funcs[l[0]](z, l[1:], **kwargs)
+                caches.append(cache)
+            return z, caches
 
     def backprop(self, caches, labels, **kwargs):
         """Feedback method of neural network.

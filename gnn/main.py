@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     trainer = Trainer(kernel=NAdam)
     print('Built Network with ' +
-          make_rgb('{} paramters'.format(net.num_params), 255, 100, 0) +
+          make_rgb('{} parameters'.format(net.num_params), 255, 100, 0) +
           (' and Trainer with ' + make_rgb('{}', 32, 180, 180) + ' kernel')
           .format(trainer.kernel.__name__) + '.')
 #    losses, perf = trainer.train(net=net,

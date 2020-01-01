@@ -11,9 +11,9 @@ import numpy as np
 def progress(p, cost=None, tr=None):
     s = ('\r{:5.2f}% |'.format(p*100.) + int(np.ceil(p*25))*'#' +
          int(np.floor((1.-p)*25 + 1e-5))*' ' + '|')
-    if cost:
+    if cost is not None:
         s += ' Loss: {:.3f}'.format(cost)
-    if tr:
+    if tr is not None:
         h = int(tr // 3600)
         m = int(tr % 3600//60)
         sec = int(tr % 60)
@@ -95,7 +95,7 @@ def softmax_prime(o):
 
 
 def cross_entropy(o, y):
-    return -np.log(o[np.arange(o.shape[0]), y] + 1e-16)
+    return -np.log(o[np.arange(o.shape[0]), y] + 1e-256)
 
 
 def cross_entropy_prime(o, y, alpha=1.):
@@ -174,6 +174,8 @@ def eigen(x, m, number=1000, eta=1e-2):
         raise ValueError('Cannot find more eigenvalues than dimensions')
     eigen_pairs = []
     lmbda = 0.
+    import time
+    start = time.time()
     for e in range(m):
         vec = normalize(np.random.randn(n, 1))
         diff = np.inf
@@ -183,6 +185,10 @@ def eigen(x, m, number=1000, eta=1e-2):
             vec = vec_
             if diff < eta:
                 break
+            if i > 0 or e > 0:
+                elapsed = time.time() - start
+                done = (e + i/number) / m
+                progress(done, float(diff), elapsed/done - elapsed)
         lmbda = vec.T.dot(x.dot(vec))/vec.T.dot(vec)
         data = data - lmbda/norm(vec)*vec.dot(vec.T)
         eigen_pairs.append((lmbda, vec))
@@ -194,6 +200,7 @@ def PCA(x, y=None, ndim=2, number=1000, eta=1e-2, plot=True):
         ndim = np.clip(ndim, 2, 3)
     x_ = x.reshape(x.shape[0], -1)
     x_ = np.nan_to_num((x_ - x_.mean(axis=0, keepdims=True))/x_.std(axis=0, keepdims=True))
+    ndim = x_.shape[1] if ndim < 0 else ndim
     covariance = cov(x.reshape(x.shape[0], -1))
     eigens = eigen(covariance, ndim, number, eta)
     transform = np.concatenate(tuple([eigen[1] for eigen in eigens]), axis=1)

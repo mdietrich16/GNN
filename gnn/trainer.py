@@ -23,25 +23,29 @@ def SGD(params, dparams, hp=(0.01,), cache=()):
     Kernel implementing one step of the SGD optimizer
     on given parameters in-place.
 
-    Positional arguments:
-        * params:
+    Positional Arguments
+    --------------------
+        params : list
             list of numpy arrays to optimize using
-        * dparams:
+        dparams : list
             list of numpy arrays with same shapes as params
             representing gradients of parameters
 
-    Keyword arguments:
-        * hp:
+    Keyword Arguments
+    -----------------
+        hp : tuple
             learning rate (kernel specific) ``(default 0.01)``
-        * cache:
-            cache used to have a time-consistent optimization,
+        cache : tuple
+            tuple used to have a time-consistent optimization,
             depends on specific kernel implementation.
             The first ocurrence of this function should be given an
             empty tuple, and subsequent ones should be given the cache
             returned by the last call of this function ``(default ())``
-    Returns:
-        * cache:
-            supplied to next call to this function via cache keyword
+
+    Returns
+    -------
+        cache : tuple
+            tuple supplied to next call to this function via cache keyword
     """
     lr = hp[0]
     for param, dparam in zip(params, dparams):
@@ -56,27 +60,30 @@ def Adam(params, dparams, hp=(0.01, 0.9, 0.999), cache=()):
     Kernel implementing one step of the
     Adam optimizer on given parameters in-place.
 
-    Positional arguments:
-        * params:
-             list of numpy arrays to optimize using
-        * dparams:
-             list of numpy arrays with same shapes as params
-             representing gradients of parameters
+    Positional Arguments
+    --------------------
+        params : list
+            list of numpy arrays to optimize using
+        dparams : list
+            list of numpy arrays with same shapes as params
+            representing gradients of parameters
 
-    Keyword arguments:
-        * hp:
+    Keyword Arguments
+    -----------------
+        hp : tuple
             hyperparameters, consisting of learning rate,
             alpha decay and beta decay(kernel specific)
             ``(default (0.01, 0.9, 0.999))``
-        * cache:
-            cache used to have a time-consistent optimization,
+        cache : tuple
+            tuple used to have a time-consistent optimization,
             depends on specific kernel implementation.
             The first ocurrence of this function should be given an
             empty tuple, and subsequent ones should be given the cache
             returned by the last call of this function ``(default ())``
-    Returns:
-        * cache:
-            supplied to next call to this function via cache keyword
+    Returns
+    -------
+        cache : tuple
+            tuple supplied to next call to this function via cache keyword
     """
     lr, alpha, beta = hp
     if cache == ():
@@ -102,27 +109,30 @@ def AdaMax(params, dparams, hp=(0.002, 0.9, 0.999), cache=()):
     Kernel implementing one step of the
     AdaMax optimizer on given parameters in-place.
 
-    Positional arguments:
-        * params:
+    Positional Arguments
+    --------------------
+        params : list
             list of numpy arrays to optimize using
-        * dparams:
+        dparams : list
             list of numpy arrays with same shapes as params
             representing gradients of parameters
 
-    Keyword arguments:
-        * hp:
+    Keyword Arguments
+    -----------------
+        hp : tuple
             hyperparameters, consisting of learning rate,
             alpha decay and beta decay(kernel specific)
             ``(default (0.002, 0.9, 0.999))``
-        * cache:
-            cache used to have a time-consistent optimization,
+        cache : tuple
+            tuple used to have a time-consistent optimization,
             depends on specific kernel implementation.
             The first ocurrence of this function should be given an
             empty tuple, and subsequent ones should be given the cache
             returned by the last call of this function ``(default ())``
-    Returns:
-       * cache:
-           supplied to next call to this function via cache keyword
+    Returns
+    -------
+        cache : tuple
+            tuple supplied to next call to this function via cache keyword
     """
     lr, alpha, beta = hp
     if cache == ():
@@ -147,27 +157,30 @@ def NAdam(params, dparams, hp=(0.01, 0.9, 0.999), cache=()):
     Kernel implementing one step of the
     NAdam optimizer on given parameters in-place.
 
-    Positional arguments:
-        * params:
+    Positional Arguments
+    --------------------
+        params : list
             list of numpy arrays to optimize using
-        * dparams:
+        dparams : list
             list of numpy arrays with same shapes as params
             representing gradients of parameters
 
-    Keyword arguments:
-        * hp:
+    Keyword Arguments
+    -----------------
+        hp : tuple
             hyperparameters, consisting of learning rate,
             alpha decay and beta decay(kernel specific)
             ``(default (0.01, 0.9, 0.999))``
-        * cache:
-            cache used to have a time-consistent optimization,
+        cache : tuple
+            tuple used to have a time-consistent optimization,
             depends on specific kernel implementation.
             The first ocurrence of this function should be given an
             empty tuple, and subsequent ones should be given the cache
             returned by the last call of this function ``(default ())``
-    Returns:
-        * cache:
-            supplied to next call to this function via cache keyword
+    Returns
+    -------
+        cache : tuple
+            tuple supplied to next call to this function via cache keyword
     """
     lr, alpha, beta = hp
     if cache == ():
@@ -196,25 +209,28 @@ def AdaGrad(params, dparams, hp=(0.01,), cache=()):
     Kernel implementing one step of the
     AdaGrad optimizer on given parameters in-place.
 
-    Positional arguments:
-        * params:
-              list of numpy arrays to optimize using
-        * dparams:
+    Positional Arguments
+    --------------------
+        params : list
+            list of numpy arrays to optimize using
+        dparams : list
             list of numpy arrays with same shapes as params
             representing gradients of parameters
 
-    Keyword arguments:
-        * hp:
+    Keyword Arguments
+    -----------------
+        hp : tuple
             learning rate (kernel specific) ``(default 0.01)``
-        * cache:
-            cache used to have a time-consistent optimization,
+        cache : tuple
+            tuple used to have a time-consistent optimization,
             depends on specific kernel implementation.
             The first ocurrence of this function should be given an
             empty tuple, and subsequent ones should be given the cache
             returned by the last call of this function ``(default ())``
-    Returns:
-        * cache:
-            supplied to next call to this function via cache keyword
+    Returns
+    -------
+        cache : tuple
+            tuple supplied to next call to this function via cache keyword
     """
     lr = hp
     if cache == ():
@@ -235,18 +251,21 @@ def RMSProp(params, dparams, hp=(0.001, 0.9), cache=()):
     Kernel implementing one step of the
     RMSProp optimizer on given parameters in-place.
 
-    Arguments
-    ---------
-        params : list of ndarrays
+    Positional Arguments
+    --------------------
+        params : list
             list of numpy arrays to optimize using
-        dparams : list of ndarrays
+        dparams : list
             list of numpy arrays with same shapes as params
             representing gradients of parameters
+
+    Keyword Arguments
+    -----------------
         hp : tuple
             hyperparameters, consisting of learning rate
             and beta decay(kernel specific) (default (0.001, 0.9))
-        cache : tuple or list
-            cache used to have a time-consistent optimization,
+        cache : tuple
+            tuple used to have a time-consistent optimization,
             depends on specific kernel implementation.
             The first ocurrence of this function should be given an
             empty tuple, and subsequent ones should be given the cache
@@ -255,7 +274,7 @@ def RMSProp(params, dparams, hp=(0.001, 0.9), cache=()):
     Returns
     -------
         cache : tuple
-            supplied to next call to this function via cache keyword
+            tuple supplied to next call to this function via cache keyword
     """
     lr, decay = hp
     if cache == ():
@@ -276,26 +295,29 @@ def Momentum(params, dparams, hp=(0.01, 0.9), cache=()):
     Kernel implementing one step of the SGD
     + Momentum optimizer on given parameters in-place.
 
-    Positional arguments:
-        * params:
+    Positional Arguments
+    --------------------
+        params : list
             list of numpy arrays to optimize using
-        * dparams:
+        dparams : list
             list of numpy arrays with same shapes as params
             representing gradients of parameters
 
-    Keyword arguments:
-        * hp:
+    Keyword Arguments
+    -----------------
+        hp : tuple
             hyperparameters, consisting of learning rate
             and decay rate (kernel specific) ``(default (0.01, 0.9))``
-        * cache:
+        cache : tuple
             cache used to have a time-consistent optimization,
             depends on specific kernel implementation.
             The first ocurrence of this function should be given an
             empty tuple, and subsequent ones should be given the cache
             returned by the last call of this function ``(default ())``
-    Returns:
-        * cache:
-            supplied to next call to this function via cache keyword
+    Returns
+    -------
+        cache : tuple
+            tuple supplied to next call to this function via cache keyword
     """
     lr, decay = hp
     if cache == ():
@@ -313,7 +335,7 @@ def Momentum(params, dparams, hp=(0.01, 0.9), cache=()):
 class Trainer:
     """Init a Trainer for neural nets using a generic optimizer on any data.
 
-    Keyword arguments
+    Keyword Arguments
     -----------------
         kernel : callable
             kernel function object exposing the kernel interface.
@@ -326,7 +348,7 @@ class Trainer:
     def __init__(self, kernel=Adam, hyperparams=None):
         """Init a Trainer for neural nets using a generic optimizer on data.
 
-        Keyword arguments
+        Keyword Arguments
         -----------------
             kernel : callable
                 kernel function object exposing the kernel interface.
@@ -402,10 +424,12 @@ class Trainer:
         train_data, test_data = data
         if isinstance(epochs, float) and epochs < 1.:
             train_data_ = []
-            train_data_.append(train_data[0][:int(np.round(epochs *
-                               len(train_data[0])))])
-            train_data_.append(train_data[1][:int(np.round(epochs *
-                               len(train_data[1])))])
+            train_data_.append(train_data[0]
+                               [:int(np.round(epochs *
+                                              len(train_data[0])))])
+            train_data_.append(train_data[1]
+                               [:int(np.round(epochs *
+                                              len(train_data[1])))])
             train_data = train_data_
             """
             test_data[0] = test_data[0][:int(np.round(epochs
@@ -479,7 +503,7 @@ class Trainer:
                 loss, dparams = gek(net, x, y, seq_len=seq_len)
 
                 losses.append(loss)
-                running_loss = .99 * running_loss + .01 * loss
+                running_loss = .90 * running_loss + .10 * loss
 
                 p, dp = net.get_params(dparams)
 
@@ -554,7 +578,7 @@ class Trainer:
             fig.show()
 
         if save and (responsive or ((isinstance(saveif, str) and eval(saveif))
-                     or saveif is None)):
+                                    or saveif is None)):
             if responsive:
                 key = ''
                 print('Do you want to save the network? (Y/N) >>>', end='')
@@ -605,6 +629,28 @@ class Trainer:
 
     @staticmethod
     def recurrent_gek(net, x, y, seq_len=64):
+        """
+        Gradient Estimation Kernel for recurrent networks.
+
+        Parameters
+        ----------
+        net : TYPE
+            DESCRIPTION.
+        x : TYPE
+            DESCRIPTION.
+        y : TYPE
+            DESCRIPTION.
+        seq_len : TYPE, optional
+            DESCRIPTION. The default is 64.
+
+        Returns
+        -------
+        TYPE
+            DESCRIPTION.
+        dparams : TYPE
+            DESCRIPTION.
+
+        """
         caches = []
         zs = []
         loss = 0.
@@ -634,6 +680,34 @@ class Trainer:
         return loss/seq_len, dparams
 
     def sample(self, net, seed, vocab, samples=100, seedlen=np.inf, **kwargs):
+        """
+        Generate output from recurrent networks for inspection.
+
+        Parameters
+        ----------
+        net : TYPE
+            DESCRIPTION.
+        seed : TYPE
+            DESCRIPTION.
+        vocab : TYPE
+            DESCRIPTION.
+        samples : TYPE, optional
+            DESCRIPTION. The default is 100.
+        seedlen : TYPE, optional
+            DESCRIPTION. The default is np.inf.
+        **kwargs : TYPE
+            DESCRIPTION.
+
+        Raises
+        ------
+        TypeError
+            DESCRIPTION.
+
+        Returns
+        -------
+        None.
+
+        """
         reset = True
 
         if not isinstance(seed, np.ndarray):
@@ -683,8 +757,10 @@ class Trainer:
             if samples > -1.:
                 samples = -1
             samples = test_data[1].size / -samples
-        samples = int(round(samples)) % test_data[0].shape[0]
-        offset = np.random.randint(test_data[1].shape[0]-samples)
+        samples = int(round(samples))
+        samples = samples if samples < test_data[1].size else test_data[1].size
+        offset = (0 if samples == test_data[1].size
+                  else np.random.randint(test_data[1].shape[0]-samples))
         x = test_data[0][offset:samples+offset]
         y = test_data[1][offset:samples+offset]
 
@@ -706,7 +782,7 @@ class Trainer:
         p_informedness = p_precision + p_recall - 1.
 
         accuracy = np.sum(tp)/samples
-        precision = np.sum(p_precision)/num_cls
+        precision = np.sum(np.nan_to_num(p_precision))/num_cls
         recall = np.sum(p_recall)/num_cls
         fscore = 2 * (precision * recall) / (precision + recall)
         informedness = precision + recall - 1.
