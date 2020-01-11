@@ -782,12 +782,17 @@ class Trainer:
         p_informedness = p_precision + p_recall - 1.
 
         accuracy = np.sum(tp)/samples
-        precision = np.sum(np.nan_to_num(p_precision))/num_cls
-        recall = np.sum(p_recall)/num_cls
-        fscore = 2 * (precision * recall) / (precision + recall)
+        chag = cond_pos.dot(pred_pos/samples)/samples
+        kappa = (accuracy-chag)/(1-chag)
+        # precision = np.sum(np.nan_to_num(p_precision))/num_cls
+        precision = np.nan_to_num(p_precision).dot(cond_pos)/samples
+        # recall = np.sum(p_recall)/num_cls
+        recall = np.nan_to_num(p_recall).dot(cond_pos)/samples
+        fscore = np.nan_to_num(p_fscore).dot(cond_pos)/samples
         informedness = precision + recall - 1.
 
         perf = {'accuracy': accuracy,
+                'kappa': kappa,
                 'precision': (precision, p_precision),
                 'recall': (recall, p_recall),
                 'F-score': (fscore, p_fscore),

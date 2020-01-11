@@ -95,7 +95,7 @@ def softmax_prime(o):
 
 
 def cross_entropy(o, y):
-    return -np.log(o[np.arange(o.shape[0]), y] + 1e-256)
+    return -np.log(o[np.arange(o.shape[0]), y] + 1e-45)
 
 
 def cross_entropy_prime(o, y, alpha=1.):

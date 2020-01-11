@@ -708,6 +708,27 @@ class GNN:
         s += '{} params)'.format(self.num_params)
         return s
 
+# TODO This is not yet evaluatable; There has to be some case analysis
+    def __repr__(self):
+        """
+        Convert the network to an evaluatable string representation.
+
+        Returns
+        -------
+        str : string
+            A string symbolically representing the Network.
+
+        """
+        s = 'gnn.net.GNN('
+        s += str(self.shapes[0]) + ', layers=('
+        for i, l in enumerate(self.layers):
+            s += "(\'" + l[0] + "', " + str(self.shapes[i+1][1])
+            if l[0] == 'conv':
+                s += ', ' + str(l[1].shape[2]) + ', ' + str(l[1].shape[3])
+            s += '), '
+        s += '), labels={})'.format(self.shapes[-1][1])
+        return s
+
     def __grad_check(self, layer, **kwargs):
         """
         Private method to sanity-check gradients.
