@@ -415,7 +415,7 @@ class Trainer:
         save = kwds.get('save', True)
         saveif = kwds.get('saveif')
         plotting = kwds.get('plot', True)
-        responsive = kwds.get('responsive', False)
+        responsive = kwds.get('responsive', True)
         recurrent = gek == Trainer.recurrent_gek
         seq_len = kwds.get('seq_len', 32)
         if recurrent:
@@ -712,7 +712,7 @@ class Trainer:
 
         if not isinstance(seed, np.ndarray):
             if not isinstance(seed, str):
-                raise TypeError('seed has to be either \
+                raise TypeError(r'seed has to be either \
                                 a data array or a string.')
             data = make_data(seed + vocab[0, 0], vocab=vocab)[0]
         else:
@@ -733,7 +733,7 @@ class Trainer:
             print(vocab[0, o].squeeze(), end='')
 
     @staticmethod
-    def performance(net, test_data, samples=-1):
+    def performance(net, test_data, samples=-1, **kwargs):
         """
         Compute several performance metrics.
 
@@ -764,7 +764,7 @@ class Trainer:
         x = test_data[0][offset:samples+offset]
         y = test_data[1][offset:samples+offset]
 
-        o = net.feedforward(x, test=True)[0].reshape(samples, -1)
+        o = net.feedforward(x, **kwargs)[0].reshape(samples, -1)
         num_cls = o.shape[1]
 
         p = np.argmax(o, axis=1)
@@ -806,7 +806,7 @@ class Trainer:
                       accuracy_on_test=True,
                       cost_on_training=True,
                       accuracy_on_training=True,
-                      recurrent=False):
+                      recurrent=False, **kwargs):
         """
         Compute cost and accuracy metrics on both test and train datasets.
 
@@ -861,13 +861,14 @@ class Trainer:
                 out = None
                 reset = True
                 for i in range(seq_len):
-                    tout = net.feedforward(x[i::seq_len], reset=reset)[0]
+                    tout = net.feedforward(x[i::seq_len],
+                                           **dict(kwargs, reset=reset))[0]
                     reset = False
                     if out is None:
                         out = np.zeros((_samples, *tout.shape[1:]))
                     out[i::seq_len] = tout
             else:
-                out = net.feedforward(x)[0]
+                out = net.feedforward(x, **kwargs)[0]
             if accuracy_on_test:
                 tacc = (np.sum(np.argmax(out, axis=1) == y[:, np.newaxis,
                                                            np.newaxis])

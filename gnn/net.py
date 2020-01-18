@@ -153,10 +153,10 @@ class GNN:
     @staticmethod
     def __fully_connected(x, params, **kwargs):
         if kwargs.get('test', False):
-            o, cols = conv(x, params[0], params[1], pad=0)
+            o, cols = conv(x, params[0], params[1], stride=1, pad=0)
             return o, (cols, x.shape)
         w = params[0].reshape(params[0].shape[0], -1)
-        x_ = x.T.reshape(-1, x.shape[0])
+        x_ = x.reshape(x.shape[0], -1).T
         o = np.ascontiguousarray((w.dot(x_) + params[1]).T)
         return o[:, :, np.newaxis, np.newaxis], (x_, w, x.shape)
 
@@ -599,7 +599,7 @@ class GNN:
                     if 'CNN' in os.listdir(path):
                         path = path + '\\CNN\\Nets'
                         if not os.path.isdir(path):
-                            raise FileNotFoundError('You cannot load a \
+                            raise FileNotFoundError(r'You cannot load a \
                                                     network out of a \
                                                     non-existing directory: {}'
                                                     .format(path))
@@ -611,12 +611,12 @@ class GNN:
             folder = path
         else:
             if not os.path.isdir(folder):
-                raise FileNotFoundError('You cannot load a network out of a \
+                raise FileNotFoundError(r'You cannot load a network out of a \
                                         non-existing directory: {}'
                                         .format(folder))
         if mode == 'name':
             if not name and not os.path.isfile(folder + name):
-                raise FileNotFoundError('You cannot load a network out of a \
+                raise FileNotFoundError(r'You cannot load a network out of a \
                                         non-existing file: {}'
                                         .format(folder + name))
             name = folder + name
@@ -624,7 +624,7 @@ class GNN:
             import glob
             fs = glob.glob(folder + '\\*.npz')
             if not fs:
-                raise FileNotFoundError('You cannot load a network \
+                raise FileNotFoundError(r'You cannot load a network \
                                         if you never saved one')
             if len(fs) == 1:
                 name = fs[0]
@@ -640,11 +640,11 @@ class GNN:
             import glob
             entries = glob.glob(folder + '\\net[0-9][0-9][0-9]*.npz')
             if not entries:
-                raise FileNotFoundError('You cannot load a network \
+                raise FileNotFoundError(r'You cannot load a network \
                                         if you never saved one')
             name = sorted(entries, reverse=True)[0]
         else:
-            raise ValueError('<mode> argument has to have value \
+            raise ValueError(r'<mode> argument has to have value \
                              of either \'name\', \'interactive\' \
                              or \'newest\', <{}> given'.format(mode))
         net = np.load(name, allow_pickle=True)
@@ -659,7 +659,7 @@ class GNN:
             else:
                 out[k] = v
         if shape is None or not isinstance(shape, tuple):
-            raise ValueError('Loading broken network file, \
+            raise ValueError(r'Loading broken network file, \
                              input shape not given. Aborting!')
         return GNN(shape, layers), out
 

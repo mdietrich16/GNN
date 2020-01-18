@@ -35,6 +35,29 @@ def im2col(x, f_shape, p=1, s=1):
 
 
 def conv(x, w, b, stride=1, pad=1):
+    """Inner mechanics of a convolutional Layer.
+
+    Parameters
+    ----------
+    x : ndarray
+        Input matrix of shape (n, c, w, h) with n datapoints, c channels,
+        and width w, height h.
+    w : ndarray
+        Weight matrix of shape (k, c, w, h) with k kernels (ouptuts), c input
+        channels and width w and height h.
+    b : ndarray
+        Biases with shape (k,1).
+    stride : int
+        Description of parameter `stride`. The default is 1.
+    pad : int
+        Description of parameter `pad`. The default is 1.
+
+    Returns
+    -------
+    type
+        Description of returned object.
+
+    """
     z, K, H, W, N = im2col(x, w.shape, pad, stride)
     o = w.reshape(K, -1).dot(z) + b.reshape(-1, 1)
     o = o.reshape(K, H, W, N).transpose(3, 0, 1, 2)
@@ -167,7 +190,7 @@ def pool_back(dout, ix, shape, size):
     dx = np.zeros(shape)
     m, n, o, p = np.indices(dout.shape).reshape(4, -1)
     o, p = o*size, p*size
-    i, j, k, l = np.unravel_index(ix.flatten(),
+    i, j, k, h = np.unravel_index(ix.flatten(),
                                   (shape[0], shape[1], size, size))
-    dx[i+m, j+n, k+o, l+p] = dout.flatten()
+    dx[i+m, j+n, k+o, h+p] = dout.flatten()
     return dx
