@@ -522,8 +522,7 @@ class Trainer:
                 done = n / (epochs*num_batches)
                 if cumtime > 10 and (n > 1 or epoch > 0):
                     remaining = cumtime/done - cumtime
-
-                progress(done, running_loss, remaining)
+                progress(done, (running_loss+loss)/2, remaining)
 
                 if plotting and n % plot_every == 0:
                     tacc, tcost, acc, cost = \
@@ -857,6 +856,8 @@ class Trainer:
             x = test_data[0][i:i+samples]
             y = test_data[1][i:i+samples]
             if recurrent:
+                # At least seq_len of 8,
+                # but preferably more than 16 parallel samples.
                 seq_len = np.maximum(_samples//16, _samples//(_samples//8))
                 out = None
                 reset = True

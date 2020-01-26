@@ -9,10 +9,12 @@ import numpy as np
 
 
 def progress(p, cost=None, tr=None):
-    s = ('\r{:5.2f}% |'.format(p*100.) + int(np.ceil(p*25))*'#' +
-         int(np.floor((1.-p)*25 + 1e-5))*' ' + '|')
+    s = make_rgb(make_rgb(('\r{:5.2f}% |'.format(p*100.)
+                          + int(np.ceil(p*25))*'#' +
+                          int(np.floor((1.-p)*25 + 1e-5))*' ' + '|'),
+                          0, 0, 0, False), 255, 255, 255, True)
     if cost is not None:
-        s += ' Loss: {:.3f}'.format(cost)
+        s += ' Loss: ' + make_rgb('{:.3f}', 140, 22, 14, True).format(cost)
     if tr is not None:
         h = int(tr // 3600)
         m = int(tr % 3600//60)

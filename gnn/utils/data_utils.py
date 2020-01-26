@@ -82,16 +82,16 @@ def load_mnist(file='mnist.pkl', folder=None,
                 path = path + '..\\'
             files = glob.glob(path + '*\\' + file)
             if len(files) > 1:
-                print('---!Warning!--- >>> File {} can be found in multiple \
-                      locations! Using first occurrence.'.format(file))
+                print(('---!Warning!--- >>> File {} can be found in multiple '
+                      'locations! Using first occurrence.').format(file))
             elif len(files) == 0:
-                raise FileNotFoundError('You cannot load a non-existing file: \
-                                        {}'.format(file))
+                raise FileNotFoundError(('You cannot load a non-existing file:'
+                                        ' {}').format(file))
             file = files[0]
     else:
         if not os.path.isdir(folder):
-            raise FileNotFoundError('You cannot load data out of a \
-                                    non-existing directory: {}'
+            raise FileNotFoundError(('You cannot load data out of a '
+                                    'non-existing directory: {}')
                                     .format(folder))
         elif not os.path.isfile(folder+file):
             raise FileNotFoundError('You cannot load a non-existing file: {}'
@@ -163,23 +163,23 @@ def make_data(string, test_string=None, dtype=np.float64,
                     path = path + '..\\'
                 files = glob.glob(path + '**\\' + string, recursive=True)
                 if len(files) > 1:
-                    print('---!Warning!--- >>> File {} can be found in \
-                          multiple locations! Using first occurrence.'.
+                    print(('---!Warning!--- >>> File {} can be found in '
+                          'multiple locations! Using first occurrence.').
                           format(string))
                 elif len(files) == 0:
-                    raise FileNotFoundError('You cannot load a non-existing \
-                                             file: {}'.format(string))
+                    raise FileNotFoundError(('You cannot load a non-existing '
+                                             'file: {}').format(string))
                 file = files[0]
             else:
                 file = string
         else:
             if not os.path.isdir(folder):
-                raise FileNotFoundError('You cannot load data out of a \
-                                        non-existing directory: {}'
+                raise FileNotFoundError(('You cannot load data out of a '
+                                        'non-existing directory: {}')
                                         .format(folder))
             elif not os.path.isfile(folder+string):
-                raise FileNotFoundError('You cannot load a non-existing \
-                                        file: {}'.format(folder+string))
+                raise FileNotFoundError(('You cannot load a non-existing '
+                                        'file: {}').format(folder+string))
             else:
                 file = folder+string
         with open(file, 'r') as f:
@@ -215,8 +215,8 @@ def gen_mini_batches(data, batch_size, strict=False):
         (n, c, w, h), second entry a ndarray of shape (n, 1) which will be
         split up in `n//batch_size` (batch_size, c, w, h) and (batch_size, 1)
         partitions or 'mini_batches'.
-    batch_size : TYPE
-        Langth of each resualting partition.
+    batch_size : int
+        Length of each resulting partition.
 
     Returns
     -------
