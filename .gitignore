@@ -1,6 +1,7 @@
 *.npz
 *.png
 FFNN.ipynb
+gnn/test.py
 *.pyc
 *.nbi
 __pycache__/
