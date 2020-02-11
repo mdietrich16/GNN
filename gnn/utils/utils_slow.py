@@ -191,8 +191,8 @@ def eigen(x, m, number=1000, eta=1e-2):
                 elapsed = time.time() - start
                 done = (e + i/number) / m
                 progress(done, float(diff), elapsed/done - elapsed)
-	if i == (number-1) and diff > eta:
-	    raise ValueError('Can not find {}. eigenvector'.format(e+1))
+        if i == (number-1) and diff > eta:
+            raise ValueError('Can not find {}. eigenvector'.format(e+1))
         lmbda = vec.T.dot(x.dot(vec))/vec.T.dot(vec)
         data = data - lmbda/norm(vec)*vec.dot(vec.T)
         eigen_pairs.append((lmbda, vec))
