@@ -592,6 +592,7 @@ class GNN:
         import os
         if not folder:
             path = os.getcwd()
+            path = path if os.path.isdir(path) else '.'
             found = False
             while not found:
                 found = 'Nets' in os.listdir(path)
